@@ -1,0 +1,80 @@
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="row">
+    <div class="col-xl-12">
+      <h2 class="page-header">
+        Manage Views
+      </h2>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card card-block table-responsive">
+        <table class="table table-hover"> <!-- Use table-sm class if necessary to shrink -->
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Creator</th>
+            <th class="text-center">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let dbview of dbviews" [class.table-active]="dbview === activeView">
+            <td>{{dbview.name}}</td>
+            <td>{{dbview.description}}</td>
+            <td>{{dbview.ownerName}}</td>
+            <td class="text-center">
+              <a href="Javascript:void(0)">
+                <i class="fa fa-lg fa-fw fa-square-o"
+                   [ngClass]="{'fa-square-o': dbview !== activeView,
+                               'fa-check-square-o': dbview === activeView}"
+                   (click)="applyView(dbview)"></i></a>&nbsp;&nbsp;
+              <a *ngIf="activeUserId == dbview.ownerId" href="Javascript:void(0)">
+                <i class="fa fa-lg fa-fw fa-trash" (click)="confirmDelete(dbview)"></i></a>
+              <i *ngIf="activeUserId != dbview.ownerId" class="fa fa-lg fa-fw">&nbsp;</i>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-md-6 col-lg-4">
+      <div class="card card-block">
+        <h4>Key</h4>
+        <i class="fa fa-lg fa-fw fa-check-square-o text-primary"></i>&nbsp;&nbsp;Active View<br>
+        <i class="fa fa-lg fa-fw fa-trash text-primary"></i>&nbsp;&nbsp;Delete View<br>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-8">
+      <button type="button" class="btn btn-secondary pull-right" href="Javascript:void(0)">Add View</button>
+      <i class="fa fa-lg fa-cog fa-spin pull-right buffer-right" style="margin-top: 0.5em;" *ngIf="savingState"></i>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" [class.in]="isConfirmingDelete" [class.shown]="isConfirmingDelete">
+  <div class="modal-dialog">
+    <div class="modal-content box-shadow">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" (click)="cancelDelete()">&times;
+        </button>
+
+        <h4 class="modal-title">Confirm Delete</h4>
+      </div>
+      <div class="modal-body" *ngIf="viewToDelete.name !== ''">
+        Are you sure you want to delete the <b>{{viewToDelete.name}}</b> view?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="deleteView()">DELETE</button>
+      </div>
+      <div class="clearfix"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal show -->

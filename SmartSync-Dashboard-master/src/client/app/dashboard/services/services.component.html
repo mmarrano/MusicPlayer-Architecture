@@ -1,0 +1,99 @@
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="row">
+    <div class="col-xl-12">
+      <h2 class="page-header">
+        Services
+      </h2>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card card-block table-responsive">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th class="text-center">Type</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let service of householdServices">
+            <td class="clickable text-primary" [routerLink]="['../','service',service.serviceId]"
+                [routerLinkActive]="['router-link-active']">{{service.name}}
+            </td>
+            <td>{{service.description}}</td>
+            <td class="text-center">{{service.serviceType.name}}</td>
+            <td class="text-center"><i class="fa fa-lg"
+                                       [ngClass]="{
+                   'text-success': service.status == 1,
+                   'fa-arrow-up': service.status == 1,
+                   'text-danger': service.status == 0,
+                   'fa-arrow-down': service.status == 0,
+                   'fa-question': service.status === 'unknown'
+                   }"></i></td>
+            <td class="text-center">
+              <a [routerLink]="['../','service',service.serviceId]" [routerLinkActive]="['router-link-active']">
+                <i class="fa fa-lg fa-eye"></i></a>
+              <a *ngIf="userIsAdmin" [routerLink]="['../','service',service.serviceId,'edit']"
+                 [routerLinkActive]="['router-link-active']">
+                &nbsp;&nbsp;<i class="fa fa-lg fa-gear"></i></a>
+              <a *ngIf="userIsAdmin" href="Javascript:void(0)">
+                &nbsp;&nbsp;<i class="fa fa-lg fa-trash" (click)="confirmDelete(service)"></i></a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-md-6 col-lg-4">
+      <div class="card card-block">
+        <h4>Key</h4>
+        <i class="fa fa-lg fa-fw fa-arrow-up text-success"></i>&nbsp;&nbsp;Service is Up<br>
+        <i class="fa fa-lg fa-fw fa-arrow-down text-danger"></i>&nbsp;&nbsp;Service is Down<br>
+        <i class="fa fa-lg fa-fw fa-question"></i>&nbsp;&nbsp;Unknown Service State<br>
+        <i class="fa fa-lg fa-fw fa-eye text-primary"></i>&nbsp;&nbsp;View Service<br>
+        <div *ngIf="userIsAdmin">
+          <i class="fa fa-lg fa-fw fa-gear text-primary"></i>&nbsp;&nbsp;Configure Service<br>
+          <i class="fa fa-lg fa-fw fa-trash text-primary"></i>&nbsp;&nbsp;Delete Service<br>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-8">
+      <button *ngIf="userIsAdmin" type="button" class="btn btn-secondary pull-right"
+              [routerLink]="['../','service','new']" [routerLinkActive]="['router-link-active']">
+        Add Service
+      </button>
+      <i class="fa fa-lg fa-cog fa-spin pull-right buffer-right" style="margin-top: 0.5em;" *ngIf="savingState"></i>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="userIsAdmin" class="modal fade" [class.in]="isConfirmingDelete" [class.shown]="isConfirmingDelete">
+  <div class="modal-dialog">
+    <div class="modal-content box-shadow">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" (click)="cancelDelete()">&times;
+        </button>
+
+        <h4 class="modal-title">Confirm Delete</h4>
+      </div>
+      <div class="modal-body" *ngIf="serviceToDelete.name !== ''">
+        Are you sure you want to delete <b>{{serviceToDelete.name}}</b>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="deleteService()">DELETE</button>
+      </div>
+      <div class="clearfix"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal show -->

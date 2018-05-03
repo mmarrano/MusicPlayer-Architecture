@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<body ng-app="main" ng-controller="userLibrary">
+
+<div class="table-container"> 
+	<h1>SE 339 Team Alpha Library Screen</h1>
+	<h2>Hello {{user}}!</h2>
+
+	<table class="w3-table w3-bordered w3-striped">
+		<tr>
+			<th>ID</th>
+			<th>Song Title</th>
+			<th>Artist</th>
+			<th>Play</th>
+		</tr>
+		<tr ng-repeat="x in songs">
+			<td>{{ x.id }}</td>
+			<td>{{ x.title }}</td>
+			<td>{{ x.artist }}</td>
+			<td><button class="w3-btn w3-ripple w3-border w3-border-grey " ng-click="play(x.id)">&#9998; Play</button></td>
+		</tr>
+	</table>
+
+</div>
+
+<script>
+	var app = angular.module('main', []);
+	app.controller('userLibrary', function($scope, $window, $http) {
+		$scope.user = $window.localStorage.getItem('user');
+	    $http.get('http://localhost:8009/sound').then(function (response) {
+	    	$scope.songs = response.data;
+	    });
+	    $scope.play = function(id){
+			console.log(id);
+			var config = {
+	            headers: { 
+	                'Cache-Control': 'no-cache',
+	                'Content-Type': 'text/plain'
+	            }
+			};
+	    	$http.post('http://localhost:8009/play/' + id, id, config);
+	    }
+	});
+</script>
+
+</body>
+</html>

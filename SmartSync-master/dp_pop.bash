@@ -1,0 +1,1 @@
+echo "INSERT INTO service_type(service_type_id, component, description, name, is_active) values (1, 'LightComponent', 'Dimmable A19 E26 RGB LED Bulb, Color Changing, 160 degree Beam Angle, 5W, 16 Color Choice, Remote Controller Included, LED Light Bulb', 'Dimmable RGB LED Bulb', false)" | mysql -uroot -prootPassword smartsync;

@@ -1,0 +1,141 @@
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="row">
+    <div class="col-xl-12">
+      <h2 class="page-header">
+        Manage Users
+      </h2>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row" *ngIf="userIsAdmin">
+    <div class="col-lg-12">
+      <div class="card card-block table-responsive">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Email</th>
+            <th>Display Name</th>
+            <th class="text-center">Admin</th>
+            <th class="text-center">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{user.email}}</td>
+            <td>{{user.displayName}}</td>
+            <td class="text-center">
+              <i [ngClass]="{'fa fa-lg fa-key': user.isAdmin}"></i></td>
+            <td class="text-center">
+              <a href="Javascript:void(0)">
+                <i class="fa fa-lg fa-key" (click)="confirmAdminChange(user)"></i></a>&nbsp;&nbsp;
+              <a href="Javascript:void(0)" (click)="confirmDelete(user)">
+                <i class="fa fa-lg fa-trash"></i></a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row" *ngIf="userIsAdmin">
+    <div class="col-md-6 col-lg-4">
+      <div class="card card-block">
+        <h4>Key</h4>
+        <i class="fa fa-lg fa-fw fa-key"></i>&nbsp;&nbsp;Admin User<br>
+        <i class="fa fa-lg fa-fw fa-key text-primary"></i>&nbsp;&nbsp;Change Privileges<br>
+        <i class="fa fa-lg fa-fw fa-trash text-primary"></i>&nbsp;&nbsp;Remove User<br>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-8">
+      <button type="button" class="btn btn-secondary pull-right" (click)="confirmInviteUser()">Invite User</button>
+      <i class="fa fa-lg fa-cog fa-spin pull-right buffer-right" style="margin-top: 0.5em;" *ngIf="savingState"></i>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div *ngIf="!userIsAdmin" class="row">
+    <div class="col-lg-12">
+      <p>Whoops! You are not authorized to view this page. Please contact your
+        household administrator if you believe you are receiving this in error.</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" [class.in]="isConfirmingDelete" [class.shown]="isConfirmingDelete">
+  <div class="modal-dialog">
+    <div class="modal-content box-shadow">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" (click)="cancelDelete()">&times;
+        </button>
+
+        <h4 class="modal-title">Confirm Remove</h4>
+      </div>
+      <div class="modal-body" *ngIf="userToDelete.email !== ''">
+        Are you sure you want to remove <b>{{userToDelete.email}}</b> from the household?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="deleteUser()">REMOVE</button>
+      </div>
+      <div class="clearfix"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal show -->
+
+<div class="modal fade" [class.in]="isConfirmingAdmin" [class.shown]="isConfirmingAdmin">
+  <div class="modal-dialog">
+    <div class="modal-content box-shadow">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" (click)="cancelAdminChange()">&times;
+        </button>
+
+        <h4 class="modal-title">Confirm Admin Change</h4>
+      </div>
+      <div class="modal-body" *ngIf="userAdminChanges.email !== ''">
+        Are you sure you want to
+        {{(userAdminChanges.setAsAdmin) ? 'give admin privileges to' : 'revoke admin privileges from'}}
+        <b>{{userAdminChanges.email}}</b>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelAdminChange()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="adminChange()">CONFIRM</button>
+      </div>
+      <div class="clearfix"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal show -->
+
+<div class="modal fade" [class.in]="isInvitingUser" [class.shown]="isInvitingUser">
+  <div class="modal-dialog">
+    <div class="modal-content box-shadow">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancelInviteUser()">
+          &times;
+        </button>
+
+        <h4 class="modal-title">Invite User to Household</h4>
+      </div>
+
+      <div class="modal-body">
+        <form #f="ngForm" id="inviteForm" (ngSubmit)="inviteUser(f)" role="form">
+          <fieldset class="form-group">
+            <label class="form-control-label">User Email</label>
+            <input name="inviteEmail" id="inviteEmailField" [attr.maxlength]="MAX_VARCHAR_LENGTH" required
+                   class="form-control" type="email" [(ngModel)]="inviteEmail">
+          </fieldset>
+        </form>
+        <p><b>NOTE:</b> The email must belong to a registered SmartSync user, or they will
+          not get an invite.</p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelInviteUser()">Cancel</button>
+        <button type="submit" form="inviteForm" class="btn btn-primary">INVITE</button>
+      </div>
+      <div class="clearfix"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal show -->

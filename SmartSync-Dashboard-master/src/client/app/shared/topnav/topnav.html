@@ -1,0 +1,13 @@
+<nav class="navbar navbar-dark bg-inverse navbar-fixed-top topnav">
+  <div class="collapse navbar-toggleable-xs clearfix text-center">
+    <a class="navbar-brand" [routerLink]="['/dashboard','home']">SmartSync</a>
+    <ul class="nav navbar-nav top-nav navbar-right pull-xs-right top-right-nav">
+      <li class="dropdown nav-item">
+        <a *ngIf="activeUserName" class="nav-link" [routerLink]="['/dashboard','user-settings']">
+          <span class="topnav-user-name">{{activeUserName}}</span>
+          <img class="user-image" src="{{activeUserImageUrl}}">
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
