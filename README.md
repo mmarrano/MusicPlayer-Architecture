@@ -12,3 +12,11 @@ Client side:
 1. Follow the instuctions until `npm start -- --app baz` (the last command) <br />
     Note: ignore the errors in the deployment process, wait until it opens up a login page on a browser. <br />
     If you are able to login into the system, you should be good to move on.
+    
+    
+## Authors
+
+* **Gabe Klein**
+* **Dohyun Kim**
+* **Mark Marrano**
+* **Jose Lopez**
