@@ -1,3 +1,5 @@
+# SmartSound
+
 The project consists of two modules (server side and front-end).
 
 Note: In order to run the server side one needs to have MySql properly installed on the same machine (MySql user: root, password: root). Install a database called "smartsync" <br />
